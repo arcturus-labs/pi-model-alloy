@@ -1,0 +1,14 @@
+{
+  "models": {
+    "sol": { "provider": "openai-codex", "id": "gpt-6.1-sol" },
+    "sonnet": { "provider": "claude-bridge", "id": "claude-sonnet-5-5" },
+    "muse": { "provider": "meta", "id": "muse-spark-1.3-contributor" },
+    "glm-flash": { "provider": "zai", "id": "glm-5.3-flash" },
+    "deepseek": { "provider": "deepseek", "id": "deepseek-flash" }
+  },
+  "alloys": {
+    "duet": { "name": "Sol + Sonnet", "members": ["sol", "sonnet"] },
+    "trio": { "name": "Sol + Sonnet + Muse", "members": ["sol", "sonnet", "muse"] },
+    "budget": { "name": "Budget Alloy", "members": ["muse", "glm-flash", "deepseek"] }
+  }
+}
