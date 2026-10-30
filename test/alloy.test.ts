@@ -24,7 +24,9 @@ const failure = (errorMessage = "503 server overloaded"): AssistantMessage => ({
 
 test("configuration accepts named blends and the shipped example", async () => {
   assert.equal(config.alloys.test.name, "Test Alloy");
-  assert.equal((await loadConfig(new URL("../alloys.example.json", import.meta.url).pathname)).alloys.budget.members.length, 3);
+  const example = await loadConfig(new URL("../alloys.example.json", import.meta.url).pathname);
+  assert.equal(example.alloys["sol-sonnet-muse"].members.length, 3);
+  assert.equal(example.alloys["muse-deepseek"].members.length, 2);
 });
 
 test("invalid config fails with actionable errors", () => {
