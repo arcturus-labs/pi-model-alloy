@@ -4,7 +4,7 @@
   "description": "Uniform random virtual-model alloys for Pi",
   "type": "module",
   "keywords": ["pi-package"],
-  "repository": { "type": "git", "url": "https://github.com/JnBrymn/pi-model-alloy" },
+  "repository": { "type": "git", "url": "https://github.com/arcturus-labs/pi-model-alloy" },
   "license": "MIT",
   "files": ["src", "alloys.example.json", "README.md"],
   "pi": { "extensions": ["./src/extension.ts"] },
