@@ -6,18 +6,26 @@ One shared conversation. Each request is routed to one randomly chosen member. R
 
 ## Install
 
+**Permanent:** from the repo directory:
+
 ```bash
-mkdir -p ~/.pi/agent
-cp alloys.example.json ~/.pi/agent/alloys.json
-# edit members to match your catalog, then either:
+cp alloys.example.json ~/.pi/agent/alloys.json  # once; edit members to match your catalog
 pi install ./pi-model-alloy
-# or one-off:
-pi -e ./pi-model-alloy/src/extension.ts
 ```
 
-`PI_ALLOY_CONFIG` overrides the config path (useful for testing).
+This adds the package to `~/.pi/agent/settings.json`, so every Pi session loads the extension automatically. To remove it later: `pi remove pi-model-alloy`.
+
+**Try it once** without installing:
+
+```bash
+pi -e /path/to/pi-model-alloy/src/extension.ts
+```
+
+The `-e` flag loads the extension for that invocation only; nothing is written to settings.
 
 ## Configure
+
+Config file: `~/.pi/agent/alloys.json` (create it with the `cp` above; `PI_ALLOY_CONFIG` env var overrides the path, useful for testing).
 
 ```json
 {
@@ -31,9 +39,12 @@ pi -e ./pi-model-alloy/src/extension.ts
 }
 ```
 
-- `models`: named aliases → exact `provider`/`id`. Swap one alias to upgrade every alloy.
-- `alloys`: `id` → stable model ID (`alloy/duet`); `name` → picker label; `members` → aliases, each with equal probability.
-- No weights, no per-member thinking levels, no silent skipping.
+Two sections:
+
+- `models`: short aliases → exact `provider`/`id` pairs from Pi's catalog (check IDs with `pi --list-models <name>`). Swap one alias to upgrade every alloy that uses it.
+- `alloys`: one entry per blend. The key (`duet`) becomes the stable model ID (`alloy/duet`); `name` is the label shown in `/model`; `members` lists aliases, each drawn with equal probability per request.
+
+Rules: at least one alloy; members must be nonempty, reference defined aliases, contain no duplicates, and resolve to distinct physical models (no virtual models as members). Violations fail fast with the file path and cause. No weights, no per-member thinking levels, no silent skipping.
 
 ## Use
 

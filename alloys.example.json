@@ -7,8 +7,8 @@
     "deepseek": { "provider": "deepseek", "id": "deepseek-flash" }
   },
   "alloys": {
-    "duet": { "name": "Sol + Sonnet", "members": ["sol", "sonnet"] },
-    "trio": { "name": "Sol + Sonnet + Muse", "members": ["sol", "sonnet", "muse"] },
-    "budget": { "name": "Budget Alloy", "members": ["muse", "glm-flash", "deepseek"] }
+    "sol-sonnet": { "name": "Sol + Sonnet", "members": ["sol", "sonnet"] },
+    "sol-sonnet-muse": { "name": "Sol + Sonnet + Muse", "members": ["sol", "sonnet", "muse"] },
+    "muse-deepseek": { "name": "Budget Alloy", "members": ["muse", "deepseek"] }
   }
 }
