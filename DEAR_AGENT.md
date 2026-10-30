@@ -71,34 +71,31 @@ Format:
 
 Back up any existing file first (`cp ~/.pi/agent/alloys.json ~/.pi/agent/alloys.json.bak`).
 
-## 5. Get the code and load the extension
+## 5. Install the extension
 
-The package is not on npm. Clone it (ask the user where they want it if no checkout exists):
+**From npm** (preferred — no checkout needed):
+
+```bash
+pi install npm:@arcturus-labs/pi-model-alloy
+```
+
+To remove: `pi remove npm:@arcturus-labs/pi-model-alloy`.
+
+**From source** (only if the user wants to hack on it or npm is unavailable). Clone it — ask the user where they want it if no checkout exists:
 
 ```bash
 git clone https://github.com/arcturus-labs/pi-model-alloy /path/they/choose/pi-model-alloy
 cd /path/they/choose/pi-model-alloy
+pi install ./
 ```
 
-All commands below use that checkout path.
+All commands below assume the extension is installed by either route.
 
-**Try once** (writes nothing to settings):
+**Try once without installing** (writes nothing to settings; needs a checkout):
 
 ```bash
 pi -e /path/to/pi-model-alloy/src/extension.ts
 ```
-
-**Install permanently** (adds to `~/.pi/agent/settings.json` packages; every session loads it):
-
-```bash
-cd /path/to/pi-model-alloy
-cp alloys.example.json ~/.pi/agent/alloys.json   # only if starting fresh
-pi install ./
-```
-
-To remove: `pi remove pi-model-alloy`.
-
-(If this package is ever published to npm, prefer `pi install npm:pi-model-alloy` and update this section.)
 
 ## 6. Verify it works
 

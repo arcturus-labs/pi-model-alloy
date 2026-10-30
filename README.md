@@ -4,16 +4,29 @@ Uniform random model alloys for Pi, after [XBOW's alloy agents](https://xbow.com
 
 One shared conversation. Each request is routed to one randomly chosen member. Repeats allowed. No extra model calls.
 
+> **Easiest setup:** tell your agent to read the setup guide and follow it:
+> `https://raw.githubusercontent.com/arcturus-labs/pi-model-alloy/main/DEAR_AGENT.md`
+> It inspects your Pi models, recommends alloys, validates them, and writes the config with your approval.
+
 ## Install
 
-**Permanent:** from the repo directory:
+**From npm** (recommended):
 
 ```bash
-cp alloys.example.json ~/.pi/agent/alloys.json  # once; edit members to match your catalog
-pi install ./pi-model-alloy
+pi install npm:@arcturus-labs/pi-model-alloy
 ```
 
-This adds the package to `~/.pi/agent/settings.json`, so every Pi session loads the extension automatically. To remove it later: `pi remove pi-model-alloy`.
+This adds the package to `~/.pi/agent/settings.json`, so every Pi session loads the extension automatically. To remove it later: `pi remove npm:@arcturus-labs/pi-model-alloy`.
+
+You still need a config file — see [Configure](#configure) below, or have your agent do it via the guide above.
+
+**From source:** clone the repo, then:
+
+```bash
+cd pi-model-alloy
+cp alloys.example.json ~/.pi/agent/alloys.json  # once; edit members to match your catalog
+pi install ./
+```
 
 **Try it once** without installing:
 

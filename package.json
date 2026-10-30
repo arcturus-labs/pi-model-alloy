@@ -1,5 +1,5 @@
 {
-  "name": "pi-model-alloy",
+  "name": "@arcturus-labs/pi-model-alloy",
   "version": "0.1.0",
   "description": "Uniform random virtual-model alloys for Pi",
   "type": "module",
