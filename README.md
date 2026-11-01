@@ -74,6 +74,16 @@ Rules: at least one alloy; members must be nonempty, reference defined aliases, 
 - Successful completions without text or tool calls are surfaced as explicit errors, not silent stops. This catches broken provider handoffs without rerolling to another member.
 - Members must support continuing from another model's tool calls/results. Stateful adapters need to rebuild from the shared transcript when they do not own the preceding tool call; Alloy cannot repair an adapter's internal session state.
 
+### Claude Code bridge compatibility
+
+If you use `pi-claude-bridge` as an alloy member, use **0.9.3 or newer**. Older versions can silently end a turn when they receive another model's tool results. The official bridge release handles this continuation; no Alloy-specific adapter patch or fork is needed.
+
+```bash
+pi update npm:pi-claude-bridge
+```
+
+Run `/reload` afterward in existing sessions. The bridge remains a separately installed package; installing or updating Alloy does not update it automatically.
+
 ## Dev setup
 
 ```bash
