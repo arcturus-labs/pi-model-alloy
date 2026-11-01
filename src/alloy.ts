@@ -123,6 +123,27 @@ export async function routeAlloy(
   return { model: resolved[index], thinkingLevel: request.thinkingLevel };
 }
 
+/** Reject silent successful completions without rerouting or inventing a continuation. */
+export function finalizeResponse(config: Config, alloyId: string, message: AssistantMessage): AssistantMessage {
+  const isMember = config.alloys[alloyId]?.members.some((alias) => {
+    const member = config.models[alias];
+    return member.provider === message.provider && member.id === message.model;
+  });
+  if (!isMember) return message;
+  const usable = message.content.some((block) =>
+    block.type === "toolCall" || (block.type === "text" && block.text.trim().length > 0));
+  if (message.stopReason === "stop" && !usable) {
+    message = {
+      ...message,
+      stopReason: "error",
+      errorMessage: "Provider returned an empty successful completion (no text or tool calls). " +
+        "The provider adapter may not support cross-model continuation after a tool result. " +
+        "No fallback member was selected.",
+    };
+  }
+  return annotateError(config, alloyId, message);
+}
+
 /** Only decorate errors: native Pi retains authority over retry/overflow classification. */
 export function annotateError(config: Config, alloyId: string, message: AssistantMessage): AssistantMessage {
   if (message.stopReason !== "error" || !message.errorMessage) return message;

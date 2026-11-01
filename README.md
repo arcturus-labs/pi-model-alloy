@@ -71,6 +71,8 @@ Rules: at least one alloy; members must be nonempty, reference defined aliases, 
 - Every member is validated (catalog presence, physical not virtual, resolvable credentials) **before** sampling. One bad member fails the request with `alloy/<id> → "alias" (provider/id): <cause>` — never silent fallback, never probe calls.
 - Automatic retries stay on the failed member. Other requests (user, tool follow-ups, compaction) resample.
 - Persistent errors (quota, invalid key, usage window) surface unchanged, prefixed once with alloy/member identity. Pi keeps authority over retry/overflow classification.
+- Successful completions without text or tool calls are surfaced as explicit errors, not silent stops. This catches broken provider handoffs without rerolling to another member.
+- Members must support continuing from another model's tool calls/results. Stateful adapters need to rebuild from the shared transcript when they do not own the preceding tool call; Alloy cannot repair an adapter's internal session state.
 
 ## Dev setup
 

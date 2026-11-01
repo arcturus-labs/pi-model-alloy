@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import type { AssistantMessage } from "@earendil-works/pi-ai";
 import type { ExtensionContext, ModelRouteRequest } from "@earendil-works/pi-coding-agent";
-import { annotateError, loadConfig, parseConfig, routeAlloy } from "../src/alloy.ts";
+import { annotateError, finalizeResponse, loadConfig, parseConfig, routeAlloy } from "../src/alloy.ts";
 
 const raw = {
   models: { a: { provider: "alpha", id: "one" }, b: { provider: "beta", id: "two" }, c: { provider: "gamma", id: "three" } },
@@ -83,6 +83,35 @@ test("retries retain the failed model and thinking without drawing", async () =>
   assert.equal(route.thinkingLevel, "low");
   const changed = parseConfig({ ...raw, alloys: { test: { name: "Test", members: ["a"] } } });
   await assert.rejects(routeAlloy(changed, "test", retry, registry), /no longer in the alloy/);
+});
+
+test("empty successful member completions fail visibly without mutating the provider message", () => {
+  const original = { ...failure(), stopReason: "stop" as const, errorMessage: undefined };
+  for (const content of [[], [{ type: "text" as const, text: "  \n" }], [{ type: "thinking" as const, thinking: "Still considering" }]]) {
+    const message = { ...original, content };
+    const result = finalizeResponse(config, "test", message);
+    assert.equal(result.stopReason, "error");
+    assert.match(result.errorMessage!, /^alloy\/test → "b" \(beta\/two\):\nProvider returned an empty successful completion/);
+    assert.match(result.errorMessage!, /No fallback member was selected/);
+    assert.equal(message.stopReason, "stop");
+    assert.equal(finalizeResponse(config, "test", result), result);
+    assert.equal(result.usage, message.usage);
+  }
+});
+
+test("response guard preserves usable output, aborts, limits, and unrelated models", () => {
+  const base = { ...failure(), stopReason: "stop" as const, errorMessage: undefined };
+  const messages: AssistantMessage[] = [
+    { ...base, content: [{ type: "text", text: "Done." }] },
+    { ...base, content: [{ type: "toolCall", id: "call_1", name: "read", arguments: { path: "notes.md" } }] },
+    { ...base, stopReason: "toolUse" },
+    { ...base, stopReason: "aborted", errorMessage: "Operation aborted" },
+    { ...base, stopReason: "length" },
+    { ...base, provider: "unrelated" },
+  ];
+  for (const message of messages) assert.equal(finalizeResponse(config, "test", message), message);
+  assert.equal(finalizeResponse(config, "unknown", base), base);
+  assert.match(finalizeResponse(config, "test", failure()).errorMessage!, /503 server overloaded/);
 });
 
 test("abort interrupts validation and never draws", async () => {

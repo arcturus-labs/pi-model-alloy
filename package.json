@@ -1,19 +1,35 @@
 {
   "name": "@arcturus-labs/pi-model-alloy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Uniform random virtual-model alloys for Pi",
   "type": "module",
-  "keywords": ["pi-package"],
-  "repository": { "type": "git", "url": "https://github.com/arcturus-labs/pi-model-alloy" },
+  "keywords": [
+    "pi-package"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcturus-labs/pi-model-alloy"
+  },
   "license": "MIT",
-  "files": ["src", "alloys.example.json", "README.md"],
-  "pi": { "extensions": ["./src/extension.ts"] },
+  "files": [
+    "src",
+    "scripts/link-host.mjs",
+    "alloys.example.json",
+    "README.md"
+  ],
+  "pi": {
+    "extensions": [
+      "./src/extension.ts"
+    ]
+  },
   "scripts": {
     "test": "node --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "postinstall": "node scripts/link-host.mjs"
   },
-  "engines": { "node": ">=22.18.0" },
+  "engines": {
+    "node": ">=22.18.0"
+  },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*",
     "@earendil-works/pi-ai": "*"

@@ -1,7 +1,7 @@
 import { homedir } from "node:os";
 import { isAbsolute, join, resolve } from "node:path";
 import { getAgentDir, type ExtensionAPI } from "@earendil-works/pi-coding-agent";
-import { annotateError, loadConfig, routeAlloy } from "./alloy.ts";
+import { finalizeResponse, loadConfig, routeAlloy } from "./alloy.ts";
 
 export default async function (pi: ExtensionAPI) {
   const override = process.env.PI_ALLOY_CONFIG;
@@ -23,7 +23,7 @@ export default async function (pi: ExtensionAPI) {
   }
   pi.on("message_end", (event, ctx) => {
     if (ctx.model?.provider !== "alloy" || event.message.role !== "assistant") return;
-    const message = annotateError(config, ctx.model.id, event.message);
+    const message = finalizeResponse(config, ctx.model.id, event.message);
     if (message !== event.message) return { message };
   });
 }
